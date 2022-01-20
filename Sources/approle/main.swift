@@ -144,8 +144,7 @@ extension Command {
                 let didSucceed: Bool = status == 0
                 let message: String = {
                     let color: String = didSucceed ? g : e
-                    var buffer: String = ""
-                    buffer += "\(color)\(asString(status))\(r): \(o)\(bundleIdentifier)\(r) -> \(o)\(type)\(r)"
+                    var buffer: String = "\(color)\(asString(status))\(r): \(o)\(bundleIdentifier)\(r) -> \(o)\(type)\(r)"
                     if !uniformTypeIdentifier.filenameExtension.isEmpty {
                         buffer += " (.\(uniformTypeIdentifier.filenameExtension))"
                     }
