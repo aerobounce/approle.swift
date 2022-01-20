@@ -254,7 +254,7 @@ extension Command {
             let bundleIdentifier: String = asBundleIdentifier(applicationName)
 
             if bundleIdentifier.isEmpty {
-                advise("Application \"\(applicationName)\" does not exist.")
+                advise(#"Application "\#(applicationName)" does not exist."#)
             }
             Self.printBundleIdentifier(bundleIdentifier)
 
