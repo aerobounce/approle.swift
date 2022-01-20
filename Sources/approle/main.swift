@@ -167,8 +167,8 @@ extension Command {
             \(p)approle id\(r) <\(c)Application Name\(r)>
             \(p)approle uti\(r) <\(c)Extension\(r)>...
             \(p)approle tree\(r) <\(c)Object Path\(r)>
-            \(p)approle set\(r) <\(c)Bundle Identifier\(r)> <(\(c)UTI\(r) | \(c)Extension\(r))>...
-            \(p)approle set\(r) <\(c)Bundle Identifier\(r)> -
+            \(p)approle set\(r) <(\(c)Application Name\(r) | \(c)Bundle Identifier\(r))> <(\(c)UTI\(r) | \(c)Extension\(r))>...
+            \(p)approle set\(r) <(\(c)Application Name\(r) | \(c)Bundle Identifier\(r))> -
             \(p)approle help\(r)
 
         \(p)COMMANDS\(r)
@@ -184,11 +184,12 @@ extension Command {
                      • This operation is dependant on Spotlight metadata database and
                          not always accurate, may return different results than 'approle uti'.
 
-            \(p)set\(r)  <\(c)Bundle Identifier\(r)> <(\(c)UTI\(r) | \(c)Extension\(r))>...
+            \(p)set\(r)  <(\(c)Application Name\(r) | \(c)Bundle Identifier\(r))> <(\(c)UTI\(r) | \(c)Extension\(r))>...
                      Set an identifier to UTIs / Extensions as default role handler (All Roles).
-                     It's allowed to mix UTIs and Extensions.
-                     Extensions will be conveted to UTIs internally, same as 'approle uti'.
 
+                     • It's allowed to mix UTIs and Extensions.
+                     • Application Name will be conveted to bundle ID internally, same as 'approle id'.
+                     • Extensions will be conveted to UTIs internally, same as 'approle uti'.
                      • The last parameter will be read from stdin if "-" is specified.
                      • It's recommended to use UTI only if an operation has to be
                          UTI specific – some extensions have multiple UTIs associated.
@@ -224,8 +225,7 @@ extension Command {
                 \(g)$ filetypes=$(approle tree ./example.md | grep -v -E 'public.(item|folder|directory|data|content)')\(r)
                 \(g)$ approle set "com.apple.TextEdit" $filetypes\(r)
 
-                # It's usually better to skip too generic UTIs.
-
+                • It's usually better to skip too generic UTIs.
         """)
     }
 }

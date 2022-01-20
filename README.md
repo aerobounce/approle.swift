@@ -12,8 +12,8 @@ USAGE
     approle id <Application Name>
     approle uti <Extension>...
     approle tree <Object Path>
-    approle set <Bundle Identifier> <(UTI | Extension)>...
-    approle set <Bundle Identifier> -
+    approle set <(Application Name | Bundle Identifier)> <(UTI | Extension)>...
+    approle set <(Application Name | Bundle Identifier)> -
     approle help
 
 COMMANDS
@@ -29,11 +29,12 @@ COMMANDS
              • This operation is dependant on Spotlight metadata database and
                  not always accurate, may return different results than 'approle uti'.
 
-    set  <Bundle Identifier> <(UTI | Extension)>...
+    set  <(Application Name | Bundle Identifier)> <(UTI | Extension)>...
              Set an identifier to UTIs / Extensions as default role handler (All Roles).
-             It's allowed to mix UTIs and Extensions.
-             Extensions will be conveted to UTIs internally, same as 'approle uti'.
 
+             • It's allowed to mix UTIs and Extensions.
+             • Application Name will be conveted to bundle ID internally, same as 'approle id'.
+             • Extensions will be conveted to UTIs internally, same as 'approle uti'.
              • The last parameter will be read from stdin if "-" is specified.
              • It's recommended to use UTI only if an operation has to be
                  UTI specific – some extensions have multiple UTIs associated.
@@ -69,6 +70,6 @@ EXAMPLES
         $ filetypes=$(approle tree ./example.md | grep -v -E 'public.(item|folder|directory|data|content)')
         $ approle set "com.apple.TextEdit" $filetypes
 
-        # It's usually better to skip too generic UTIs.
+        • It's usually better to skip too generic UTIs.
 
 ```
