@@ -47,7 +47,7 @@ let c: String = isTERM ? "\u{001B}[4;36m" : "" // Cyan Underlined
 let b: String = isTERM ? "\u{001B}[1m" : "" // Bold
 let r: String = isTERM ? "\u{001B}[0m" : "" // Reset
 
-func stdout(_ message: String) { fputs("\(message)", stdout) }
+func stdout(_ message: String) { fputs("\(message)\n", stdout) }
 func stderr(_ message: String) { fputs("\(e)\(message)\(r)\n", stderr) }
 func advise(_ message: String) -> Never { stderr(message); exit(EXIT_FAILURE) }
 
@@ -89,13 +89,13 @@ enum Command: String {
 
 extension Command {
     private static func printBundleIdentifier(_ bundleIdentifier: String) {
-        print(bundleIdentifier)
+        stdout(bundleIdentifier)
     }
 
     private static func printUTIs(_ uniformTypeIdentifiers: [UTI]) {
         for uniformTypeIdentifier in uniformTypeIdentifiers {
             for type in uniformTypeIdentifier.types {
-                print("\(type) # .\(uniformTypeIdentifier.filenameExtension)")
+                stdout("\(type) # .\(uniformTypeIdentifier.filenameExtension)")
             }
         }
     }
@@ -112,7 +112,7 @@ extension Command {
             advise("Failed to obtain infomation from database.")
         }
         for type in typeTree {
-            print(type)
+            stdout(type)
         }
     }
 
@@ -150,15 +150,13 @@ extension Command {
                     }
                     return buffer
                 }()
-                didSucceed
-                    ? stdout(message + "\n")
-                    : stderr(message)
+                didSucceed ? stdout(message) : stderr(message)
             }
         }
     }
 
     private static func printHelp() {
-        print("""
+        stdout("""
         \(p)NAME\(r)
             \(p)approle\(r) -- Set default applications for UTI / Extension.
 
