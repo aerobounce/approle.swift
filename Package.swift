@@ -8,6 +8,6 @@ let package: Package = .init(
     name: productName,
     platforms: [.macOS(.v10_15)],
     products: [.executable(name: productName, targets: [productName])],
-    targets: [.executableTarget(name: productName, sources: ["main.swift"])],
+    targets: [.executableTarget(name: productName)],
     swiftLanguageVersions: [.v5]
 )
