@@ -84,8 +84,8 @@ public.content
 
 ```sh
 > approle set Xcode sh public.python-script rb
-Succeeded: com.apple.dt.Xcode -> public.python-script
 Succeeded: com.apple.dt.Xcode -> public.shell-script (.sh)
+Succeeded: com.apple.dt.Xcode -> public.python-script
 Succeeded: com.apple.dt.Xcode -> public.ruby-script (.rb)
 ```
 

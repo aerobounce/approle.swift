@@ -285,10 +285,15 @@ extension Command {
             let components: [String] = useStdin ? parseSTDIN() : arguments
 
             let bundleIdentifier: String = possibleBundleID.isEmpty ? appNameOrID : possibleBundleID
-            let uniformTypeIdentifiers: [UTI] = [UTI(types: components.filter { $0.range(of: ".") != nil })] // UTIs should have '.'
-                + components
-                .filter { $0.range(of: ".") == nil } // Extensions does not have '.'
-                .map(UTI.init(filenameExtension:))
+            let uniformTypeIdentifiers: [UTI] = components.reduce(into: [UTI]()) { (utis: inout [UTI], component: String) in
+                if case .some = component.range(of: ".") {
+                    // UTI (UTIs should have '.')
+                    utis.append(.init(types: [component]))
+                } else {
+                    // Extensions does not have '.'
+                    utis.append(.init(filenameExtension: component))
+                }
+            }
 
             Self.setDefaultRoleHandler(to: bundleIdentifier, uniformTypeIdentifiers)
 
