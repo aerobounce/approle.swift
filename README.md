@@ -6,72 +6,110 @@ CLI to associate UTI and Extension to an application.
 
 ## Usage
 
+#### Print bundle identifier for an Application Name.
+
 ```sh
-NAME
-    approle -- Set default applications for UTI / Extension.
+approle id <Application Name>
+```
 
-USAGE
-    approle id <Application Name>
-    approle uti <Extension>...
-    approle tree <Object Path>
-    approle set <(Application Name | Bundle Identifier)> <(UTI | Extension)>...
-    approle set <(Application Name | Bundle Identifier)> -
-    approle help
+#### Print UTIs associated to Extensions.
 
-COMMANDS
-    id   <Application Name>
-             Print bundle identifier for an Application Name.
+```sh
+approle uti <Extension>...
+```
 
-    uti  <Extension>...
-             Print UTIs associated to Extensions.
+#### Print UTI tree of Object Path.
 
-    tree <Object Path>
-             Print UTI tree of Object Path.
+```sh
+approle tree <Object Path>
+```
 
-             • This operation is dependant on Spotlight metadata database and
-                 not always accurate, may return different results than 'approle uti'.
+#### Set an identifier to UTIs / Extensions as default role handler (All Roles).
 
-    set  <(Application Name | Bundle Identifier)> <(UTI | Extension)>...
-             Set an identifier to UTIs / Extensions as default role handler (All Roles).
+```sh
+approle set <(Application Name | Bundle Identifier)> <(UTI | Extension)>...
+```
 
-             • It's allowed to mix UTIs and Extensions.
-             • Application Name will be conveted to bundle ID internally, same as 'approle id'.
-             • Extensions will be conveted to UTIs internally, same as 'approle uti'.
-             • The last parameter will be read from stdin if "-" is specified.
-             • It's recommended to use UTI only if an operation has to be
-                 UTI specific – some extensions have multiple UTIs associated.
+#### Show help.
 
-    help
-             Show this help.
+```sh
+approle help
+```
 
-EXAMPLES
-    Get BundleIdentifier of an Application
-        $ approle id TextEdit
-        $ approle id Xcode
+## Examples
 
-    Get UTIs from extensions
-        $ approle uti sh
-        $ approle uti sh py rb
+#### Get BundleIdentifier of an Application
 
-    Print UTI tree of an object
-        $ approle tree ./example.txt
-        $ approle tree ./example.md
+```sh
+> approle id TextEdit
+com.apple.TextEdit
+```
 
-    Set default application for UTI / Extension
-        $ approle set "com.apple.TextEdit" sh
-        $ approle set "com.apple.TextEdit" sh public.python-script
-        $ approle set "com.apple.TextEdit" sh public.python-script rb
+```sh
+> approle id Xcode
+com.apple.dt.Xcode
+```
 
-    Read from stdin
-        cat << EOF | approle set Xcode -
-        c h hh m mm
-        swift
-        EOF
+#### Get UTIs from extensions
 
-    Use UTI tree to set default application
-        $ filetypes=$(approle tree ./example.md | grep -v -E 'public.(item|folder|directory|data|content)')
-        $ approle set "com.apple.TextEdit" $filetypes
+```sh
+> approle uti sh py rb
+public.shell-script # .sh
+public.python-script # .py
+public.ruby-script # .rb
+```
 
-        • It's usually better to skip too generic UTIs.
+#### Print UTI tree of an object
 
+```sh
+> approle tree ./example.txt
+public.plain-text
+public.text
+public.data
+public.item
+public.content
+```
+
+```sh
+> approle tree ./example.md
+net.daringfireball.markdown
+public.plain-text
+public.text
+public.data
+public.item
+public.content
+```
+
+#### Set default application for UTI / Extension
+
+```sh
+> approle set Xcode sh public.python-script rb
+Succeeded: com.apple.dt.Xcode -> public.python-script
+Succeeded: com.apple.dt.Xcode -> public.shell-script (.sh)
+Succeeded: com.apple.dt.Xcode -> public.ruby-script (.rb)
+```
+
+#### Read from stdin
+
+```sh
+cat << EOF | approle set Xcode -
+c h hh m mm
+swift
+EOF
+
+Succeeded: com.apple.dt.Xcode -> public.c-source (.c)
+Succeeded: com.apple.dt.Xcode -> public.c-header (.h)
+Succeeded: com.apple.dt.Xcode -> public.c-plus-plus-header (.hh)
+Succeeded: com.apple.dt.Xcode -> public.objective-c-source (.m)
+Succeeded: com.apple.dt.Xcode -> public.objective-c-plus-plus-source (.mm)
+Succeeded: com.apple.dt.Xcode -> public.swift-source (.swift)
+```
+
+#### Use UTI tree to set default application
+
+```sh
+# It's usually better to skip too generic UTIs.
+approle tree ./example.md |
+    grep -v -E 'public.(item|folder|directory|data|content)' |
+    approle set Xcode -
 ```
