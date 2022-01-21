@@ -1,6 +1,8 @@
 # approle.swift
 
-Set default applications for UTI / Extension.
+![platform](https://img.shields.io/badge/platform-macOS-blue)
+
+CLI to associate UTI and Extension to an application.
 
 ## Usage
 
