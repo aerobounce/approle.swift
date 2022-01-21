@@ -52,8 +52,8 @@ EXAMPLES
         $ approle uti sh py rb
 
     Print UTI tree of an object
-        $ approle ./example.txt
-        $ approle ./example.md
+        $ approle tree ./example.txt
+        $ approle tree ./example.md
 
     Set default application for UTI / Extension
         $ approle set "com.apple.TextEdit" sh

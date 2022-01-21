@@ -204,8 +204,8 @@ extension Command {
                 \(g)$ approle uti sh py rb\(r)
 
             \(p)Print UTI tree of an object\(r)
-                \(g)$ approle ./example.txt\(r)
-                \(g)$ approle ./example.md\(r)
+                \(g)$ approle tree ./example.txt\(r)
+                \(g)$ approle tree ./example.md\(r)
 
             \(p)Set default application for UTI / Extension\(r)
                 \(g)$ approle set "com.apple.TextEdit" sh\(r)
