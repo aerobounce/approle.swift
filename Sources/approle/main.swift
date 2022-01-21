@@ -178,39 +178,39 @@ extension Command {
             \(p)tree\(r) <\(c)Object Path\(r)>
                      Print UTI tree of Object Path.
 
-                     • This operation is dependant on Spotlight metadata database and
-                         not always accurate, may return different results than 'approle uti'.
+                     - This operation is dependant on Spotlight metadata database and
+                       not always accurate, may return different results than 'approle uti'.
 
             \(p)set\(r)  <(\(c)Application Name\(r) | \(c)Bundle Identifier\(r))> <(\(c)UTI\(r) | \(c)Extension\(r))>...
                      Set an identifier to UTIs / Extensions as default role handler (All Roles).
 
-                     • It's allowed to mix UTIs and Extensions.
-                     • Application Name will be conveted to bundle ID internally, same as 'approle id'.
-                     • Extensions will be conveted to UTIs internally, same as 'approle uti'.
-                     • The last parameter will be read from stdin if "-" is specified.
-                     • It's recommended to use UTI only if an operation has to be
-                         UTI specific – some extensions have multiple UTIs associated.
+                     - It's allowed to mix UTIs and Extensions.
+                     - Application Name will be conveted to bundle ID internally, same as 'approle id'.
+                     - Extensions will be conveted to UTIs internally, same as 'approle uti'.
+                     - The last parameter will be read from stdin if "-" is specified.
+                     - It's recommended to use UTI only if an operation has to be UTI specific,
+                       as some extensions have multiple UTIs associated.
 
             \(p)help\(r)
                      Show this help.
 
         \(p)EXAMPLES\(r)
             \(p)Get BundleIdentifier of an Application\(r)
-                \(g)$ approle id TextEdit\(r)
-                \(g)$ approle id Xcode\(r)
+                \(g)approle id TextEdit\(r)
+                \(g)approle id Xcode\(r)
 
             \(p)Get UTIs from extensions\(r)
-                \(g)$ approle uti sh\(r)
-                \(g)$ approle uti sh py rb\(r)
+                \(g)approle uti sh\(r)
+                \(g)approle uti sh py rb\(r)
 
             \(p)Print UTI tree of an object\(r)
-                \(g)$ approle tree ./example.txt\(r)
-                \(g)$ approle tree ./example.md\(r)
+                \(g)approle tree ./example.txt\(r)
+                \(g)approle tree ./example.md\(r)
 
             \(p)Set default application for UTI / Extension\(r)
-                \(g)$ approle set "com.apple.TextEdit" sh\(r)
-                \(g)$ approle set "com.apple.TextEdit" sh public.python-script\(r)
-                \(g)$ approle set "com.apple.TextEdit" sh public.python-script rb\(r)
+                \(g)approle set "com.apple.TextEdit" sh\(r)
+                \(g)approle set "com.apple.TextEdit" sh public.python-script\(r)
+                \(g)approle set "com.apple.TextEdit" sh public.python-script rb\(r)
 
             \(p)Read from stdin\(r)
                 cat << EOF | approle set Xcode -
@@ -219,10 +219,10 @@ extension Command {
                 EOF
 
             \(p)Use UTI tree to set default application\(r)
-                \(g)$ filetypes=$(approle tree ./example.md | grep -v -E 'public.(item|folder|directory|data|content)')\(r)
-                \(g)$ approle set "com.apple.TextEdit" $filetypes\(r)
+                \(g)filetypes=$(approle tree ./example.md | grep -v -E 'public.(item|folder|directory|data|content)')\(r)
+                \(g)approle set "com.apple.TextEdit" $filetypes\(r)
 
-                • It's usually better to skip too generic UTIs.
+                - It's usually better to skip too generic UTIs.
         """)
     }
 }
