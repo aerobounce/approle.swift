@@ -62,20 +62,20 @@ func asBundleIdentifier(_ applicationName: String) -> String {
 ///
 /// MARK: Wrappers
 ///
-struct UTI {
+struct UniformType {
     let filenameExtension: String
-    let types: [String]
+    let identifiers: [String]
 
     init(filenameExtension: String) {
         self.filenameExtension = filenameExtension
-        self.types = UTTypeCreateAllIdentifiersForTag(kUTTagClassFilenameExtension,
-                                                      filenameExtension as CFString,
-                                                      nil)?.takeUnretainedValue() as? [String] ?? []
+        self.identifiers = UTTypeCreateAllIdentifiersForTag(kUTTagClassFilenameExtension,
+                                                            filenameExtension as CFString,
+                                                            nil)?.takeUnretainedValue() as? [String] ?? []
     }
 
-    init(types: [String]) {
+    init(identifiers: [String]) {
         self.filenameExtension = "" // Not in use
-        self.types = types
+        self.identifiers = identifiers
     }
 }
 
@@ -92,10 +92,10 @@ extension Command {
         stdout(bundleIdentifier)
     }
 
-    private static func printUTIs(_ uniformTypeIdentifiers: [UTI]) {
-        for uniformTypeIdentifier in uniformTypeIdentifiers {
-            for type in uniformTypeIdentifier.types {
-                stdout("\(type) # .\(uniformTypeIdentifier.filenameExtension)")
+    private static func printUTIs(_ uniformTypes: [UniformType]) {
+        for uniformType in uniformTypes {
+            for identifier in uniformType.identifiers {
+                stdout("\(identifier) # .\(uniformType.filenameExtension)")
             }
         }
     }
@@ -111,12 +111,12 @@ extension Command {
               case let typeTree as [String] = MDItemCopyAttribute(item, kMDItemContentTypeTree) else {
             advise("Failed to obtain infomation from database.")
         }
-        for type in typeTree {
-            stdout(type)
+        for identifier in typeTree {
+            stdout(identifier)
         }
     }
 
-    private static func setDefaultRoleHandler(to bundleIdentifier: String, _ uniformTypeIdentifiers: [UTI]) {
+    private static func setDefaultRoleHandler(to bundleIdentifier: String, _ uniformTypes: [UniformType]) {
         func asString(_ code: OSStatus) -> String {
             let errorCode: String = " (\(code))"
             /// Some too old codes are no longer in use since macOS 12.
@@ -138,15 +138,15 @@ extension Command {
             default: return code == 0 ? "Succeeded" : "Error" + errorCode
             }
         }
-        for uniformTypeIdentifier in uniformTypeIdentifiers {
-            for type in uniformTypeIdentifier.types {
-                let status: OSStatus = LSSetDefaultRoleHandlerForContentType(type as CFString, .all, bundleIdentifier as CFString)
+        for uniformType in uniformTypes {
+            for identifier in uniformType.identifiers {
+                let status: OSStatus = LSSetDefaultRoleHandlerForContentType(identifier as CFString, .all, bundleIdentifier as CFString)
                 let didSucceed: Bool = status == 0
                 let message: String = {
                     let color: String = didSucceed ? g : e
-                    var buffer: String = "\(color)\(asString(status))\(r): \(o)\(bundleIdentifier)\(r) -> \(o)\(type)\(r)"
-                    if !uniformTypeIdentifier.filenameExtension.isEmpty {
-                        buffer += " (.\(uniformTypeIdentifier.filenameExtension))"
+                    var buffer: String = "\(color)\(asString(status))\(r): \(o)\(bundleIdentifier)\(r) -> \(o)\(identifier)\(r)"
+                    if !uniformType.filenameExtension.isEmpty {
+                        buffer += " (.\(uniformType.filenameExtension))"
                     }
                     return buffer
                 }()
@@ -256,7 +256,7 @@ extension Command {
             Self.printBundleIdentifier(bundleIdentifier)
 
         case .printUTIs:
-            Self.printUTIs(arguments.compactMap(UTI.init(filenameExtension:)))
+            Self.printUTIs(arguments.compactMap(UniformType.init(filenameExtension:)))
 
         case .printTypeTree:
             Self.printTypeTree(of: .init(fileURLWithPath: arguments[0]))
@@ -285,17 +285,17 @@ extension Command {
             let components: [String] = useStdin ? parseSTDIN() : arguments
 
             let bundleIdentifier: String = possibleBundleID.isEmpty ? appNameOrID : possibleBundleID
-            let uniformTypeIdentifiers: [UTI] = components.reduce(into: [UTI]()) { (utis: inout [UTI], component: String) in
+            let uniformTypes: [UniformType] = components.reduce(into: [UniformType]()) { (utis: inout [UniformType], component: String) in
                 if case .some = component.range(of: ".") {
                     // UTI (UTIs should have '.')
-                    utis.append(.init(types: [component]))
+                    utis.append(.init(identifiers: [component]))
                 } else {
                     // Extensions does not have '.'
                     utis.append(.init(filenameExtension: component))
                 }
             }
 
-            Self.setDefaultRoleHandler(to: bundleIdentifier, uniformTypeIdentifiers)
+            Self.setDefaultRoleHandler(to: bundleIdentifier, uniformTypes)
 
         case .printHelp:
             Self.printHelp()
