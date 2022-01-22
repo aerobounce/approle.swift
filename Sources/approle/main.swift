@@ -20,6 +20,9 @@
  *     LSSetDefaultRoleHandlerForContentType(:::)
  *     UTTypeCreateAllIdentifiersForTag(:::)
  *
+ * • SPI: _UTCopyDeclaredTypeIdentifiers
+ *     Returns CFArray containing all UTIs recognized by current system.
+ *
  * • Notes:
  *     • UTTypeCreateAllIdentifiersForTag(kUTTagClassFilenameExtension, _, _)
  *       CFURLCopyResourcePropertyForKey(_, kCFURLTypeIdentifierKey, _, _)
@@ -29,11 +32,22 @@
  *         is dependant to Spotlight metadata database, and not always accurate.
  *           1. It doesn't create dynamic association (data will be empty / nil).
  *           2. It can return infomation associated with removed application.
- *
  */
 
 import CoreServices
 import Foundation
+
+///
+/// MARK: SPI
+///
+
+///
+/// Returns CFArray containing all UTIs recognized by current system.
+/// https://github.com/apple-open-source/macos/blob/master/WebCore/PAL/pal/spi/cocoa/CoreServicesSPI.h
+/// Permalink: 6d69f10f7428663781ff2c42137ba4188c69eb24
+///
+@_silgen_name("_UTCopyDeclaredTypeIdentifiers")
+func UTCopyDeclaredTypeIdentifiers() -> CFArray?
 
 ///
 /// MARK: Helpers
@@ -82,6 +96,7 @@ struct UniformType {
 enum Command: String {
     case printBundleIdentifier = "id"
     case printUTIs = "uti"
+    case printSystemDeclaredUTIs = "list"
     case printTypeTree = "tree"
     case setDefaultRoleHandler = "set"
     case printHelp = "help"
@@ -97,6 +112,24 @@ extension Command {
             for identifier in uniformType.identifiers {
                 stdout("\(identifier) # .\(uniformType.filenameExtension)")
             }
+        }
+    }
+
+    private static func printSystemDeclaredUTIs(conforming: [String], nonConforming: [String]) {
+        guard case let allIdentifiers as [CFString] = UTCopyDeclaredTypeIdentifiers() else {
+            advise("No matching UTI found.")
+        }
+        let filteredIdentifiers: [String] = allIdentifiers
+            .filter { (identifier: CFString) in
+                conforming.allSatisfy { UTTypeConformsTo(identifier, $0 as CFString) }
+                    && nonConforming.allSatisfy { !UTTypeConformsTo(identifier, $0 as CFString) }
+            }
+            .map { $0 as String }
+        if filteredIdentifiers.isEmpty {
+            advise("No matching UTI found.")
+        }
+        for typeIdentifier in filteredIdentifiers {
+            stdout(typeIdentifier as String)
         }
     }
 
@@ -163,6 +196,7 @@ extension Command {
         \(p)USAGE\(r)
             \(p)approle id\(r) <\(c)Application Name\(r)>
             \(p)approle uti\(r) <\(c)Extension\(r)>...
+            \(p)approle list\(r) [\(c)Conforming UTI\(r)...] [!\(c)Non-Conforming UTI\(r)...]
             \(p)approle tree\(r) <\(c)Object Path\(r)>
             \(p)approle set\(r) <(\(c)Application Name\(r) | \(c)Bundle Identifier\(r))> <(\(c)UTI\(r) | \(c)Extension\(r))>...
             \(p)approle set\(r) <(\(c)Application Name\(r) | \(c)Bundle Identifier\(r))> -
@@ -174,6 +208,14 @@ extension Command {
 
             \(p)uti\(r)  <\(c)Extension\(r)>...
                      Print UTIs associated to Extensions.
+
+            \(p)list\(r) [\(c)Conforming UTI\(r)...] [!\(c)Non-Conforming UTI\(r)...]
+                     Print filtered list of UTIs declared in system.
+
+                     - At least 1 conforming or non-conforming UTI has to be specified.
+                     - Prepend "!" to Non-Conforming UTI (e.g. "!public.disk-image").
+                     - It's allowed to mix Conforming and Non-Conforming UTIs.
+                     - Multiple UTIs can be supplied to both parameters.
 
             \(p)tree\(r) <\(c)Object Path\(r)>
                      Print UTI tree of Object Path.
@@ -202,6 +244,9 @@ extension Command {
             \(p)Get UTIs from extensions\(r)
                 \(g)approle uti sh\(r)
                 \(g)approle uti sh py rb\(r)
+
+            \(p)List UTIs conforming "public.archive" but not "public.disk-image"\(r)
+                \(g)approle list "public.archive" "!public.disk-image"\(r)
 
             \(p)Print UTI tree of an object\(r)
                 \(g)approle tree ./example.txt\(r)
@@ -257,6 +302,14 @@ extension Command {
 
         case .printUTIs:
             Self.printUTIs(arguments.compactMap(UniformType.init(filenameExtension:)))
+
+        case .printSystemDeclaredUTIs:
+            Self.printSystemDeclaredUTIs(
+                conforming: arguments.filter { $0.first != "!" },
+                nonConforming: arguments
+                    .filter { $0.first == "!" }
+                    .map { String($0.dropFirst()) }
+            )
 
         case .printTypeTree:
             Self.printTypeTree(of: .init(fileURLWithPath: arguments[0]))
