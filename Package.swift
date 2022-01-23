@@ -6,8 +6,7 @@ import PackageDescription
 let productName: String = "approle"
 let package: Package = .init(
     name: productName,
-    platforms: [.macOS(.v10_15)],
+    platforms: [.macOS(.v11)],
     products: [.executable(name: productName, targets: [productName])],
-    targets: [.executableTarget(name: productName)],
-    swiftLanguageVersions: [.v5]
+    targets: [.executableTarget(name: productName)]
 )

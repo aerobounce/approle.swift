@@ -1,6 +1,7 @@
 # approle.swift
 
-![platform](https://img.shields.io/badge/platform-macOS-blue)
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Faerobounce%2Fapprole.swift%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/aerobounce/approle.swift)
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Faerobounce%2Fapprole.swift%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/aerobounce/approle.swift)
 
 CLI to associate UTI and Extension to an application.
 
