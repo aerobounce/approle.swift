@@ -4,6 +4,12 @@
 
 CLI to associate UTI and Extension to an application.
 
+## Build
+
+1. Clone this repository
+2. Inside the root of the local copy, `swift build -c release`
+3. Binary is located at `.build/release/approle`
+
 ## Usage
 
 #### Print bundle identifier for an Application Name.
@@ -16,6 +22,12 @@ approle id <Application Name>
 
 ```sh
 approle uti <Extension>...
+```
+
+#### Print filtered list of UTIs declared in system.
+
+```sh
+approle list [Conforming UTI...] [!Non-Conforming UTI...]
 ```
 
 #### Print UTI tree of Object Path.
@@ -57,6 +69,23 @@ com.apple.dt.Xcode
 public.shell-script # .sh
 public.python-script # .py
 public.ruby-script # .rb
+```
+
+#### List all UTIs matching
+
+List all UTIs which conform to `public.archive` excluding UTIs conform to `public.disk-image`
+
+```sh
+> approle list "public.archive" "!public.disk-image"
+com.winzip.zipx-archive
+org.tukaani.lzma-archive
+public.lzip-archive
+public.lzip-tar-archive
+public.lzop-archive
+public.lzop-tar-archive
+public.lrzip-archive
+public.lrzip-tar-archive
+...
 ```
 
 #### Print UTI tree of an object
@@ -103,6 +132,14 @@ Succeeded: com.apple.dt.Xcode -> public.c-plus-plus-header (.hh)
 Succeeded: com.apple.dt.Xcode -> public.objective-c-source (.m)
 Succeeded: com.apple.dt.Xcode -> public.objective-c-plus-plus-source (.mm)
 Succeeded: com.apple.dt.Xcode -> public.swift-source (.swift)
+```
+
+#### Use UTI list to set default application
+
+This will set Xcode as default application for all the UTIs conform to `public.source-code`
+
+```sh
+approle list "public.source-code" | approle set Xcode -
 ```
 
 #### Use UTI tree to set default application
