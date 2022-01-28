@@ -199,7 +199,7 @@ extension Command {
             \(p)approle list\(r) [\(c)Conforming UTI\(r)...] [!\(c)Non-Conforming UTI\(r)...]
             \(p)approle tree\(r) <\(c)Object Path\(r)>
             \(p)approle set\(r) <(\(c)Application Name\(r) | \(c)Bundle Identifier\(r))> <(\(c)UTI\(r) | \(c)Extension\(r))>...
-            \(p)approle set\(r) <(\(c)Application Name\(r) | \(c)Bundle Identifier\(r))> -
+            \(p)approle set\(r) <(\(c)Application Name\(r) | \(c)Bundle Identifier\(r))>
             \(p)approle help\(r)
 
         \(p)COMMANDS\(r)
@@ -224,12 +224,13 @@ extension Command {
                        not always accurate, may return different results than 'approle uti'.
 
             \(p)set\(r)  <(\(c)Application Name\(r) | \(c)Bundle Identifier\(r))> <(\(c)UTI\(r) | \(c)Extension\(r))>...
+            \(p)set\(r)  <(\(c)Application Name\(r) | \(c)Bundle Identifier\(r))>
                      Set an identifier to UTIs / Extensions as default role handler (All Roles).
+                     If no UTI nor Extensions are specified, stdin will be read.
 
                      - It's allowed to mix UTIs and Extensions.
                      - Application Name will be conveted to bundle ID internally, same as 'approle id'.
                      - Extensions will be conveted to UTIs internally, same as 'approle uti'.
-                     - The last parameter will be read from stdin if "-" is specified.
                      - It's recommended to use UTI only if an operation has to be UTI specific,
                        as some extensions have multiple UTIs associated.
 
@@ -258,7 +259,7 @@ extension Command {
                 \(g)approle set "com.apple.TextEdit" sh public.python-script rb\(r)
 
             \(p)Read from stdin\(r)
-                cat << EOF | approle set Xcode -
+                cat << EOF | approle set Xcode
                 c h hh m mm
                 swift
                 EOF
@@ -275,7 +276,6 @@ extension Command {
 extension Command {
     static func execute() {
         var arguments: [String] = CommandLine.arguments.dropFirst().map { $0 }
-        let useStdin: Bool = arguments.last == "-"
         let usage: String = r + " 'approle help' for usage."
 
         if arguments.isEmpty {
@@ -315,7 +315,7 @@ extension Command {
             Self.printTypeTree(of: .init(fileURLWithPath: arguments[0]))
 
         case .setDefaultRoleHandler:
-            if !useStdin, arguments.count < 2 {
+            if arguments.isEmpty {
                 advise("Invalid form of command.")
             }
 
@@ -333,9 +333,9 @@ extension Command {
             }
 
             let appNameOrID: String = arguments[0]
-            let possibleBundleID: String = asBundleIdentifier(appNameOrID)
             arguments = arguments.dropFirst().map { $0 } // Consumed by 'appNameOrID'
-            let components: [String] = useStdin ? parseSTDIN() : arguments
+            let possibleBundleID: String = asBundleIdentifier(appNameOrID)
+            let components: [String] = arguments.isEmpty ? parseSTDIN() : arguments
 
             let bundleIdentifier: String = possibleBundleID.isEmpty ? appNameOrID : possibleBundleID
             let uniformTypes: [UniformType] = components.reduce(into: [UniformType]()) { (utis: inout [UniformType], component: String) in

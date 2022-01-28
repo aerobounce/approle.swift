@@ -122,7 +122,7 @@ Succeeded: com.apple.dt.Xcode -> public.ruby-script (.rb)
 #### Read from stdin
 
 ```sh
-cat << EOF | approle set Xcode -
+cat << EOF | approle set Xcode
 c h hh m mm
 swift
 EOF
@@ -140,7 +140,7 @@ Succeeded: com.apple.dt.Xcode -> public.swift-source (.swift)
 This will set Xcode as default application for all the UTIs conform to `public.source-code`
 
 ```sh
-approle list "public.source-code" | approle set Xcode -
+approle list "public.source-code" | approle set Xcode
 ```
 
 #### Use UTI tree to set default application
@@ -149,5 +149,5 @@ approle list "public.source-code" | approle set Xcode -
 # It's usually better to skip too generic UTIs.
 approle tree ./example.md |
     grep -v -E 'public.(item|folder|directory|data|content)' |
-    approle set Xcode -
+    approle set Xcode
 ```
