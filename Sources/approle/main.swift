@@ -117,7 +117,7 @@ extension Command {
 
     private static func printSystemDeclaredUTIs(conforming: [String], nonConforming: [String]) {
         guard case let allIdentifiers as [CFString] = UTCopyDeclaredTypeIdentifiers() else {
-            advise("No matching UTI found.")
+            advise("Failed to copy UTIs declared in system.")
         }
         let filteredIdentifiers: [String] = allIdentifiers
             .filter { (identifier: CFString) in
