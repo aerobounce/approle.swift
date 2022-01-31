@@ -1,7 +1,8 @@
 # approle.swift
 
-[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Faerobounce%2Fapprole.swift%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/aerobounce/approle.swift)
-[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Faerobounce%2Fapprole.swift%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/aerobounce/approle.swift)
+[![][swift-versions]][swiftpackageindex]
+[![][platforms]][swiftpackageindex]
+[![][tag]][repo]
 
 CLI to associate UTI and Extension to an application.
 
@@ -151,3 +152,11 @@ approle tree ./example.md |
     grep -v -E 'public.(item|folder|directory|data|content)' |
     approle set Xcode
 ```
+
+
+[repo]: https://github.com/aerobounce/approle.swift
+[swiftpackageindex]: https://swiftpackageindex.com/aerobounce/approle.swift
+
+[swift-versions]: https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Faerobounce%2Fapprole.swift%2Fbadge%3Ftype%3Dswift-versions
+[platforms]: https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Faerobounce%2Fapprole.swift%2Fbadge%3Ftype%3Dplatforms
+[tag]: https://img.shields.io/github/v/tag/aerobounce/approle.swift?display_name=tag
