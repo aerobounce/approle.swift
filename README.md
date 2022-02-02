@@ -4,7 +4,8 @@
 [![][bagde-platforms]][swiftpackageindex]
 [![][bagde-tag]][tags]
 
-CLI to associate UTI and Extension to an application.
+CLI to associate UTI and Extension to an application.\
+Stand alone executable Swift program.
 
 ## Install
 
