@@ -1,16 +1,16 @@
 # approle.swift
 
-[![][swift-versions]][swiftpackageindex]
-[![][platforms]][swiftpackageindex]
-[![][tag]][repo]
+[![][bagde-swift-versions]][swiftpackageindex]
+[![][bagde-platforms]][swiftpackageindex]
+[![][bagde-tag]][tags]
 
 CLI to associate UTI and Extension to an application.
 
-## Build
+## Install
 
-1. Clone this repository
-2. Inside the root of the local copy, `swift build -c release`
-3. Binary is located at `.build/release/approle`
+```sh
+brew install "aerobounce/tap/approle"
+```
 
 ## Usage
 
@@ -154,9 +154,9 @@ approle tree ./example.md |
 ```
 
 
-[repo]: https://github.com/aerobounce/approle.swift
+[tags]: https://github.com/aerobounce/approle.swift/tags
 [swiftpackageindex]: https://swiftpackageindex.com/aerobounce/approle.swift
 
-[swift-versions]: https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Faerobounce%2Fapprole.swift%2Fbadge%3Ftype%3Dswift-versions
-[platforms]: https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Faerobounce%2Fapprole.swift%2Fbadge%3Ftype%3Dplatforms
-[tag]: https://img.shields.io/github/v/tag/aerobounce/approle.swift?display_name=tag
+[bagde-swift-versions]: https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Faerobounce%2Fapprole.swift%2Fbadge%3Ftype%3Dswift-versions
+[bagde-platforms]: https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Faerobounce%2Fapprole.swift%2Fbadge%3Ftype%3Dplatforms
+[bagde-tag]: https://img.shields.io/github/v/tag/aerobounce/approle.swift?display_name=tag
