@@ -10,7 +10,7 @@ Stand alone executable Swift program.
 ## Install
 
 ```sh
-brew install "aerobounce/tap/approle"
+brew install aerobounce/tap/approle
 ```
 
 ## Usage
