@@ -57,11 +57,17 @@ approle help
 
 ```sh
 > approle id TextEdit
+```
+
+```sh
 com.apple.TextEdit
 ```
 
 ```sh
 > approle id Xcode
+```
+
+```sh
 com.apple.dt.Xcode
 ```
 
@@ -69,6 +75,9 @@ com.apple.dt.Xcode
 
 ```sh
 > approle uti sh py rb
+```
+
+```sh
 public.shell-script # .sh
 public.python-script # .py
 public.ruby-script # .rb
@@ -80,6 +89,9 @@ List all UTIs which conform to `public.archive` excluding UTIs conform to `publi
 
 ```sh
 > approle list "public.archive" "!public.disk-image"
+```
+
+```sh
 com.winzip.zipx-archive
 org.tukaani.lzma-archive
 public.lzip-archive
@@ -95,6 +107,9 @@ public.lrzip-tar-archive
 
 ```sh
 > approle tree ./example.txt
+```
+
+```sh
 public.plain-text
 public.text
 public.data
@@ -104,6 +119,9 @@ public.content
 
 ```sh
 > approle tree ./example.md
+```
+
+```sh
 net.daringfireball.markdown
 public.plain-text
 public.text
@@ -116,6 +134,9 @@ public.content
 
 ```sh
 > approle set Xcode sh public.python-script rb
+```
+
+```sh
 Succeeded: com.apple.dt.Xcode -> public.shell-script (.sh)
 Succeeded: com.apple.dt.Xcode -> public.python-script
 Succeeded: com.apple.dt.Xcode -> public.ruby-script (.rb)
@@ -128,7 +149,9 @@ cat << EOF | approle set Xcode
 c h hh m mm
 swift
 EOF
+```
 
+```sh
 Succeeded: com.apple.dt.Xcode -> public.c-source (.c)
 Succeeded: com.apple.dt.Xcode -> public.c-header (.h)
 Succeeded: com.apple.dt.Xcode -> public.c-plus-plus-header (.hh)
