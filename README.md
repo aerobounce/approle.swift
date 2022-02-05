@@ -85,9 +85,8 @@ public.ruby-script # .rb
 
 #### List all UTIs matching
 
-List all UTIs which conform to `public.archive` excluding UTIs conform to `public.disk-image`
-
 ```sh
+# List all UTIs which conform to `public.archive` excluding UTIs conform to `public.disk-image`.
 > approle list "public.archive" "!public.disk-image"
 ```
 
@@ -145,7 +144,7 @@ Succeeded: com.apple.dt.Xcode -> public.ruby-script (.rb)
 #### Read from stdin
 
 ```sh
-cat << EOF | approle set Xcode
+approle set Xcode << EOF
 c h hh m mm
 swift
 EOF
@@ -162,16 +161,15 @@ Succeeded: com.apple.dt.Xcode -> public.swift-source (.swift)
 
 #### Use UTI list to set default application
 
-This will set Xcode as default application for all the UTIs conform to `public.source-code`
-
 ```sh
+# Set Xcode as default application for all the UTIs conform to `public.source-code`.
 approle list "public.source-code" | approle set Xcode
 ```
 
 #### Use UTI tree to set default application
 
 ```sh
-# It's usually better to skip too generic UTIs.
+# Better to skip too generic UTIs.
 approle tree ./example.md |
     grep -v -E 'public.(item|folder|directory|data|content)' |
     approle set Xcode
